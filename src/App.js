@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
-import './App.css';
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
+      <div className="app">
+        <header className="header">
+          <img src={logo} className="logo" alt="logo" />
+          <h1 className="title">Image Trainer</h1>
         </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
+        <p className="intro">
+          Welcome to image trainer! This site is currently undergoing rapid development.
         </p>
+        Upon completion, there will be two modes: a flashcard mode to match images with pairs, and a memorization mode, where images are prompted and you need to type in the letters.
       </div>
     );
   }
