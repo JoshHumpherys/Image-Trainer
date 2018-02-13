@@ -10,12 +10,17 @@ class App extends Component {
     this.imageUploaded = this.imageUploaded.bind(this);
   }
 
+  static removeExtension(fileName) {
+    return fileName.slice(0, fileName.indexOf('.'));
+  }
+
   imageUploaded(e) {
     const files = e.target.files;
-    const images = [];
     for(let i = 0; i < files.length; i++) {
       const reader = new FileReader();
-      reader.onloadend = () => this.setState({ images: [...this.state.images, reader.result] });
+      reader.onloadend = () => this.setState({
+        images: [...this.state.images, { name: App.removeExtension(files[i].name), image: reader.result }]
+      });
       reader.readAsDataURL(files[i]);
     }
   }
@@ -32,7 +37,8 @@ class App extends Component {
         </p>
         Upon completion, there will be two modes: a flashcard mode to match images with pairs, and a memorization mode, where images are prompted and you need to type in the letters.
         <input type="file" onChange={this.imageUploaded} multiple />
-        <img ref={img => this.img = img} src={this.state.images.length > 0 ? this.state.images[0] : undefined} />
+        <img src={this.state.images.length > 0 ? this.state.images[0].image : undefined} />
+        <p>{this.state.images.length > 0 ? this.state.images[0].name : ''}</p>
       </div>
     );
   }
