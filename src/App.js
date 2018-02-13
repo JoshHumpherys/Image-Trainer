@@ -4,7 +4,15 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { images: [], imageMode: true, index: 0 };
+    this.state = {
+      images: [],
+      imageMode: true,
+      index: 0,
+      rightKeyDown: false,
+      leftKeyDown: false,
+      downKeyDown: false,
+      upKeyDown: false
+    };
 
     this.imageUploaded = this.imageUploaded.bind(this);
   }
@@ -31,20 +39,32 @@ class App extends Component {
 
   componentDidMount() {
     document.addEventListener('keydown', e => {
-      if(e.keyCode === 37 && !this.state.leftDown) {
-        this.setState({ leftDown: true, index: this.shiftIndex(-1) });
+      if(e.keyCode === 37 && !this.state.leftKeyDown) {
+        this.setState({ leftKeyDown: true, index: this.shiftIndex(-1) });
         e.preventDefault();
-      } else if(e.keyCode === 39 && !this.state.rightDown) {
-        this.setState({ rightDown: true, index: this.shiftIndex(1) });
+      } else if(e.keyCode === 39 && !this.state.rightKeyDown) {
+        this.setState({ rightKeyDown: true, index: this.shiftIndex(1) });
+        e.preventDefault();
+      } else if(e.keyCode === 38 && !this.state.downKeyDown) {
+        this.setState({ downKeyDown: true, imageMode: !this.state.imageMode });
+        e.preventDefault();
+      } else if(e.keyCode === 40 && !this.state.upKeyDown) {
+        this.setState({ upKeyDown: true, imageMode: !this.state.imageMode });
         e.preventDefault();
       }
     });
     document.addEventListener('keyup', e => {
-      if(e.keyCode === 37 && this.state.leftDown) {
-        this.setState({ leftDown: false });
+      if(e.keyCode === 37 && this.state.leftKeyDown) {
+        this.setState({ leftKeyDown: false });
         e.preventDefault();
-      } else if(e.keyCode === 39 && this.state.rightDown) {
-        this.setState({ rightDown: false });
+      } else if(e.keyCode === 39 && this.state.rightKeyDown) {
+        this.setState({ rightKeyDown: false });
+        e.preventDefault();
+      } else if(e.keyCode === 38 && this.state.downKeyDown) {
+        this.setState({ downKeyDown: false });
+        e.preventDefault();
+      } else if(e.keyCode === 40 && this.state.upKeyDown) {
+        this.setState({ upKeyDown: false });
         e.preventDefault();
       }
     });
