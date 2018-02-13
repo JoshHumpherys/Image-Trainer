@@ -1,17 +1,21 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 
 class App extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { images: [] };
+    this.state = { images: [], imageMode: true, index: 0 };
 
     this.imageUploaded = this.imageUploaded.bind(this);
   }
 
   static removeExtension(fileName) {
     return fileName.slice(0, fileName.indexOf('.'));
+  }
+
+  shiftIndex(shift) {
+    const { length } = this.state.images;
+    return ((this.state.index + shift) % length + length) % length;
   }
 
   imageUploaded(e) {
@@ -25,20 +29,45 @@ class App extends Component {
     }
   }
 
+  componentDidMount() {
+    document.addEventListener('keydown', e => {
+      if(e.keyCode === 37 && !this.state.leftDown) {
+        this.setState({ leftDown: true, index: this.shiftIndex(-1) });
+        e.preventDefault();
+      } else if(e.keyCode === 39 && !this.state.rightDown) {
+        this.setState({ rightDown: true, index: this.shiftIndex(1) });
+        e.preventDefault();
+      }
+    });
+    document.addEventListener('keyup', e => {
+      if(e.keyCode === 37 && this.state.leftDown) {
+        this.setState({ leftDown: false });
+        e.preventDefault();
+      } else if(e.keyCode === 39 && this.state.rightDown) {
+        this.setState({ rightDown: false });
+        e.preventDefault();
+      }
+    });
+  }
+
   render() {
     return (
       <div className="app">
         <header className="header">
-          <img src={logo} className="logo" alt="logo" />
           <h1 className="title">Image Trainer</h1>
+          <p>
+            Welcome to image trainer! This site is currently undergoing rapid development.
+          </p>
+          <p>
+            Choose images from your computer and use the arrow keys to switch between images or modes.
+          </p>
+          <input type="file" onChange={this.imageUploaded} multiple />
         </header>
-        <p className="intro">
-          Welcome to image trainer! This site is currently undergoing rapid development.
-        </p>
-        Upon completion, there will be two modes: a flashcard mode to match images with pairs, and a memorization mode, where images are prompted and you need to type in the letters.
-        <input type="file" onChange={this.imageUploaded} multiple />
-        <img src={this.state.images.length > 0 ? this.state.images[0].image : undefined} />
-        <p>{this.state.images.length > 0 ? this.state.images[0].name : ''}</p>
+        {
+          this.state.imageMode ?
+            <img src={this.state.images.length > 0 ? this.state.images[this.state.index].image : undefined} /> :
+            <p>{this.state.images.length > 0 ? this.state.images[this.state.index].name : ''}</p>
+        }
       </div>
     );
   }
