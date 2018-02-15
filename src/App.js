@@ -73,20 +73,32 @@ class App extends Component {
   render() {
     return (
       <div className="app">
-        <header className="header">
-          <h1 className="title">Image Trainer</h1>
-          <p>
-            Welcome to image trainer! This site is currently undergoing rapid development.
-          </p>
-          <p>
-            Choose images from your computer and use the arrow keys to switch between images or modes.
-          </p>
-          <input type="file" onChange={this.imageUploaded} multiple />
-        </header>
+        {
+          this.state.images.length === 0 ?
+            (
+              <header className="header">
+                <h1 className="title">Image Trainer</h1>
+                <p>
+                  Welcome to image trainer! This site is currently undergoing rapid development.
+                </p>
+                <p>
+                  Choose images from your computer and use the arrow keys to switch between images or modes.
+                </p>
+                <input type="file" onChange={this.imageUploaded} multiple/>
+              </header>
+            ) : (
+              undefined
+            )
+        }
         {
           this.state.imageMode ?
-            <img src={this.state.images.length > 0 ? this.state.images[this.state.index].image : undefined} /> :
-            <p>{this.state.images.length > 0 ? this.state.images[this.state.index].name : ''}</p>
+            (
+              <div className="image-container">
+                <img src={this.state.images.length > 0 ? this.state.images[this.state.index].image : undefined} />
+              </div>
+            ) : (
+              <p>{this.state.images.length > 0 ? this.state.images[this.state.index].name : ''}</p>
+            )
         }
       </div>
     );
