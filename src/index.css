@@ -31,6 +31,10 @@ body {
   height: 100%;
 }
 
+.image-container.hidden {
+  display: none;
+}
+
 .image-container > img {
   border: 1px solid #333;
   width: auto;

@@ -93,7 +93,7 @@ class App extends Component {
         {
           this.state.imageMode ?
             (
-              <div className="image-container">
+              <div className={'image-container' + (this.state.images.length === 0 ? ' hidden' : '')}>
                 <img src={this.state.images.length > 0 ? this.state.images[this.state.index].image : undefined} />
               </div>
             ) : (
