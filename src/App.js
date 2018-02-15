@@ -97,7 +97,11 @@ class App extends Component {
                 <img src={this.state.images.length > 0 ? this.state.images[this.state.index].image : undefined} />
               </div>
             ) : (
-              <p>{this.state.images.length > 0 ? this.state.images[this.state.index].name : ''}</p>
+              <p className="pair">
+                <span>
+                  {this.state.images.length > 0 ? this.state.images[this.state.index].name : ''}
+                </span>
+              </p>
             )
         }
       </div>

@@ -9,6 +9,7 @@ body {
   background-color: #222;
   color: #fff;
   height: 100%;
+  overflow: hidden;
 }
 
 #root {
@@ -34,4 +35,15 @@ body {
   border: 1px solid #333;
   width: auto;
   height: 100%;
+}
+
+.pair { /* TODO center text vertically the correct way */
+  position: relative;
+  height: 100%;
+}
+
+.pair > span {
+  position: relative;
+  font-size: 15vh;
+  top: 40%;
 }
