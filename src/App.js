@@ -71,6 +71,8 @@ class App extends Component {
   }
 
   render() {
+
+    const backgroundImageUrl = (this.state.images.length > 0 ? this.state.images[this.state.index].image : undefined);
     return (
       <div className="app">
         {
@@ -93,9 +95,9 @@ class App extends Component {
         {
           this.state.imageMode ?
             (
-              <div className={'image-container' + (this.state.images.length === 0 ? ' hidden' : '')}>
-                <img src={this.state.images.length > 0 ? this.state.images[this.state.index].image : undefined} />
-              </div>
+              <div
+                className={'image-container' + (this.state.images.length === 0 ? ' hidden' : '')}
+                style={{ backgroundImage: 'url(\'' + backgroundImageUrl + '\')' }} />
             ) : (
               <p className="pair">
                 <span>

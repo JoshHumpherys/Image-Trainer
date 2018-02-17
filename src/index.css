@@ -27,18 +27,14 @@ body {
 }
 
 .image-container {
-  /*margin: 20px;*/
   height: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 }
 
 .image-container.hidden {
   display: none;
-}
-
-.image-container > img {
-  border: 1px solid #333;
-  width: auto;
-  height: 100%;
 }
 
 .pair { /* TODO center text vertically the correct way */
