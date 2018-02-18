@@ -30,9 +30,12 @@ class App extends Component {
     const files = e.target.files;
     for(let i = 0; i < files.length; i++) {
       const reader = new FileReader();
-      reader.onloadend = () => this.setState({
-        images: [...this.state.images, { name: App.removeExtension(files[i].name), image: reader.result }]
-      });
+      reader.onloadend = () => {
+        const images = [...this.state.images];
+        const image = { name: App.removeExtension(files[i].name), image: reader.result };
+        images.splice(Math.floor(images.length * Math.random()), 0, image);
+        this.setState({ images });
+      };
       reader.readAsDataURL(files[i]);
     }
   }
