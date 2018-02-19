@@ -48,12 +48,6 @@ class App extends Component {
         const history = [this.getNextHistoryIndex().historyIndex];
         this.setState({ images: [...this.state.images, image], historyIndex: 0, history });
       };
-      // reader.onloadend = () => {
-      //   const images = [...this.state.images];
-      //   const image = { name: App.removeExtension(files[i].name), image: reader.result };
-      //   images.splice(Math.floor(images.length * Math.random()), 0, image);
-      //   this.setState({ images });
-      // };
       reader.readAsDataURL(files[i]);
     }
   }
@@ -94,11 +88,10 @@ class App extends Component {
   }
 
   render() {
-    const backgroundImageUrl = (
-      this.state.images.length > 0 ?
-        this.state.images[this.state.history[this.state.historyIndex]].image :
-        undefined
-    );
+    const imageObj = this.state.images.length > 0 ?
+      this.state.images[this.state.history[this.state.historyIndex]] : undefined;
+    const imageUrl = imageObj ? imageObj.image : undefined;
+    const imageName = imageObj ? imageObj.name : '';
     return (
       <div className="app">
         {
@@ -123,11 +116,11 @@ class App extends Component {
             (
               <div
                 className={'image-container' + (this.state.images.length === 0 ? ' hidden' : '')}
-                style={{ backgroundImage: 'url(\'' + backgroundImageUrl + '\')' }} />
+                style={{ backgroundImage: 'url(\'' + imageUrl + '\')' }} />
             ) : (
               <p className="pair">
                 <span>
-                  {this.state.images.length > 0 ? this.state.images[this.state.historyIndex].name : ''}
+                  {imageName}
                 </span>
               </p>
             )
