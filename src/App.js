@@ -5,6 +5,7 @@ class App extends Component {
     super(props);
 
     this.state = {
+      imagesUploaded: false,
       images: [],
       imageMode: true,
       history: [],
@@ -40,6 +41,10 @@ class App extends Component {
   }
 
   imageUploaded(e) {
+    if(this.state.imagesUploaded) {
+      this.setState({ historyIndex: -1, history: [], images: [] });
+    }
+    this.setState({ imagesUploaded: true });
     const files = e.target.files;
     for(let i = 0; i < files.length; i++) {
       const reader = new FileReader();
@@ -94,23 +99,16 @@ class App extends Component {
     const imageName = imageObj ? imageObj.name : '';
     return (
       <div className="app">
-        {
-          this.state.images.length === 0 ?
-            (
-              <header className="header">
-                <h1 className="title">Image Trainer</h1>
-                <p>
-                  Welcome to image trainer! This site is currently undergoing rapid development.
-                </p>
-                <p>
-                  Choose images from your computer and use the arrow keys to switch between images or modes.
-                </p>
-                <input type="file" onChange={this.imageUploaded} multiple/>
-              </header>
-            ) : (
-              undefined
-            )
-        }
+        <header className="header">
+          <h1 className="title">Image Trainer</h1>
+          <p>
+            Welcome to image trainer! This site is currently undergoing rapid development.
+          </p>
+          <p>
+            Choose images from your computer and use the arrow keys to switch between images or modes.
+          </p>
+          <input type="file" onChange={this.imageUploaded} multiple/>
+        </header>
         {
           this.state.imageMode ?
             (
