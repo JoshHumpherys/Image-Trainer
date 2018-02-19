@@ -19,6 +19,8 @@ class App extends Component {
     this.imageUploaded = this.imageUploaded.bind(this);
     this.getNextHistoryIndex = this.getNextHistoryIndex.bind(this);
     this.getLastHistoryIndex = this.getLastHistoryIndex.bind(this);
+    this.handleBackButton = this.handleBackButton.bind(this);
+    this.handleShuffle = this.handleShuffle.bind(this);
   }
 
   static removeExtension(fileName) {
@@ -55,6 +57,14 @@ class App extends Component {
       };
       reader.readAsDataURL(files[i]);
     }
+  }
+
+  handleBackButton(e) {
+    this.setState({ historyIndex: -1, history: [], images: [] });
+  }
+
+  handleShuffle(e) {
+    this.setState({ historyIndex: 0, history: [Math.floor(this.state.images.length * Math.random())] });
   }
 
   componentDidMount() {
@@ -99,16 +109,25 @@ class App extends Component {
     const imageName = imageObj ? imageObj.name : '';
     return (
       <div className="app">
-        <header className="header">
-          <h1 className="title">Image Trainer</h1>
-          <p>
-            Welcome to image trainer! This site is currently undergoing rapid development.
-          </p>
-          <p>
-            Choose images from your computer and use the arrow keys to switch between images or modes.
-          </p>
-          <input type="file" onChange={this.imageUploaded} multiple/>
-        </header>
+        {
+          this.state.images.length === 0 ? (
+            <header className="intro-header">
+              <h1 className="title">Image Trainer</h1>
+              <p>
+                Welcome to image trainer! This site is currently undergoing rapid development.
+              </p>
+              <p>
+                Choose images from your computer and use the arrow keys to switch between images or modes.
+              </p>
+              <input type="file" onChange={this.imageUploaded} multiple className="button" />
+            </header>
+          ) : (
+            <header className="images-header">
+              <input type="button" value="Back" className="button" onClick={this.handleBackButton} />
+              <input type="button" value="Shuffle" className="button" onClick={this.handleShuffle} />
+            </header>
+          )
+        }
         {
           this.state.imageMode ?
             (

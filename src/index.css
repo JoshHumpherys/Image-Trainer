@@ -23,9 +23,34 @@ body {
   flex-direction: column;
 }
 
-.header {
+header {
   background-color: #333;
   padding: 20px;
+}
+
+.intro-header {
+  padding-bottom: 50px;
+}
+
+.button {
+  color: black;
+  border: 0;
+  padding: 5px;
+  border-radius: 5px;
+  outline: none;
+  background-color: aquamarine;
+}
+
+.button:hover {
+  cursor: pointer;
+}
+
+.button:active {
+  background-color: aqua;
+}
+
+.images-header > input:not(:last-child) {
+  margin-right: 10px;
 }
 
 .image-container {
