@@ -7,7 +7,8 @@ class App extends Component {
     this.state = {
       images: [],
       imageMode: true,
-      index: 0,
+      history: [],
+      historyIndex: -1,
       rightKeyDown: false,
       leftKeyDown: false,
       downKeyDown: false,
@@ -15,15 +16,27 @@ class App extends Component {
     };
 
     this.imageUploaded = this.imageUploaded.bind(this);
+    this.getNextHistoryIndex = this.getNextHistoryIndex.bind(this);
+    this.getLastHistoryIndex = this.getLastHistoryIndex.bind(this);
   }
 
   static removeExtension(fileName) {
     return fileName.slice(0, fileName.indexOf('.'));
   }
 
-  shiftIndex(shift) {
-    const { length } = this.state.images;
-    return ((this.state.index + shift) % length + length) % length;
+  getNextHistoryIndex() {
+    const historyIndex = this.state.historyIndex + 1;
+    const nextImageIndex = Math.floor(this.state.images.length * Math.random());
+    return { historyIndex, history: [...this.state.history, nextImageIndex]};
+  }
+
+  getLastHistoryIndex() {
+    if(this.state.historyIndex === 0) {
+      const { history } = this.getNextHistoryIndex();
+      return { historyIndex: 0, history: [history[history.length - 1], ...this.state.history] };
+    } else {
+      return { historyIndex: this.state.historyIndex - 1, history: this.state.history };
+    }
   }
 
   imageUploaded(e) {
@@ -31,11 +44,16 @@ class App extends Component {
     for(let i = 0; i < files.length; i++) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        const images = [...this.state.images];
         const image = { name: App.removeExtension(files[i].name), image: reader.result };
-        images.splice(Math.floor(images.length * Math.random()), 0, image);
-        this.setState({ images });
+        const history = [this.getNextHistoryIndex().historyIndex];
+        this.setState({ images: [...this.state.images, image], historyIndex: 0, history });
       };
+      // reader.onloadend = () => {
+      //   const images = [...this.state.images];
+      //   const image = { name: App.removeExtension(files[i].name), image: reader.result };
+      //   images.splice(Math.floor(images.length * Math.random()), 0, image);
+      //   this.setState({ images });
+      // };
       reader.readAsDataURL(files[i]);
     }
   }
@@ -43,10 +61,12 @@ class App extends Component {
   componentDidMount() {
     document.addEventListener('keydown', e => {
       if(e.keyCode === 37 && !this.state.leftKeyDown) {
-        this.setState({ leftKeyDown: true, index: this.shiftIndex(-1) });
+        const { historyIndex, history } = this.getLastHistoryIndex();
+        this.setState({ leftKeyDown: true, historyIndex, history });
         e.preventDefault();
       } else if(e.keyCode === 39 && !this.state.rightKeyDown) {
-        this.setState({ rightKeyDown: true, index: this.shiftIndex(1) });
+        const { historyIndex, history } = this.getNextHistoryIndex();
+        this.setState({ rightKeyDown: true, historyIndex, history });
         e.preventDefault();
       } else if(e.keyCode === 38 && !this.state.downKeyDown) {
         this.setState({ downKeyDown: true, imageMode: !this.state.imageMode });
@@ -74,8 +94,11 @@ class App extends Component {
   }
 
   render() {
-
-    const backgroundImageUrl = (this.state.images.length > 0 ? this.state.images[this.state.index].image : undefined);
+    const backgroundImageUrl = (
+      this.state.images.length > 0 ?
+        this.state.images[this.state.history[this.state.historyIndex]].image :
+        undefined
+    );
     return (
       <div className="app">
         {
@@ -104,7 +127,7 @@ class App extends Component {
             ) : (
               <p className="pair">
                 <span>
-                  {this.state.images.length > 0 ? this.state.images[this.state.index].name : ''}
+                  {this.state.images.length > 0 ? this.state.images[this.state.historyIndex].name : ''}
                 </span>
               </p>
             )
