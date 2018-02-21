@@ -52,8 +52,12 @@ class App extends Component {
       const reader = new FileReader();
       reader.onloadend = () => {
         const image = { name: App.removeExtension(files[i].name), image: reader.result };
-        const history = [this.getNextHistoryIndex().historyIndex];
-        this.setState({ images: [...this.state.images, image], historyIndex: 0, history });
+        const { history } = this.getNextHistoryIndex();
+        this.setState({
+          images: [...this.state.images, image],
+          historyIndex: 0,
+          history: [history[history.length - 1]]
+        });
       };
       reader.readAsDataURL(files[i]);
     }
