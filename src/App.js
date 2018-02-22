@@ -30,7 +30,7 @@ class App extends Component {
   getNextHistoryIndex() {
     const historyIndex = this.state.historyIndex + 1;
     const nextImageIndex = Math.floor(this.state.images.length * Math.random());
-    return { historyIndex, history: [...this.state.history, nextImageIndex]};
+    return { historyIndex, history: [...this.state.history, nextImageIndex] };
   }
 
   getLastHistoryIndex() {
@@ -104,6 +104,10 @@ class App extends Component {
         e.preventDefault();
       }
     });
+    this.imageContainer.addEventListener('mouseup', e => {
+      this.setState(this.getLastHistoryIndex());
+      e.preventDefault();
+    });
   }
 
   render() {
@@ -136,6 +140,7 @@ class App extends Component {
           this.state.imageMode ?
             (
               <div
+                ref={imageContainer => this.imageContainer = imageContainer }
                 className={'image-container' + (this.state.images.length === 0 ? ' hidden' : '')}
                 style={{ backgroundImage: 'url(\'' + imageUrl + '\')' }} />
             ) : (
